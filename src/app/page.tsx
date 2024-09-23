@@ -3,12 +3,15 @@
 import { useState } from "react";
 import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+import { Switch } from "~/components/ui/switch";
+import { Label } from "~/components/ui/label";
 
 export default function UnstructuredInput() {
   const [url, setUrl] = useState("");
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [useZerox, setUseZerox] = useState(false);
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -16,8 +19,9 @@ export default function UnstructuredInput() {
     setResult(null);
 
     try {
+      const apiEndpoint = useZerox ? "/api/zerox" : "/api/unstructured";
       const response = await fetch(
-        `/api/unstructured?url=${encodeURIComponent(url)}`,
+        `${apiEndpoint}?url=${encodeURIComponent(url)}`,
       );
       const data = await response.json();
 
@@ -36,6 +40,14 @@ export default function UnstructuredInput() {
 
   return (
     <div className="flex flex-col gap-4">
+      <div className="flex items-center space-x-2">
+        <Switch
+          id="use-zerox"
+          checked={useZerox}
+          onCheckedChange={setUseZerox}
+        />
+        <Label htmlFor="use-zerox">Use Zerox</Label>
+      </div>
       <div className="flex gap-2">
         <Input
           type="text"
