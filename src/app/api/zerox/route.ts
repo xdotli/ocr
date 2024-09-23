@@ -1,6 +1,8 @@
 import { type NextRequest } from "next/server";
 import { env } from "~/env";
 
+export const maxDuration = 300;
+
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function GET(request: NextRequest) {

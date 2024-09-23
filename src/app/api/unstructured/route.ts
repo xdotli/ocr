@@ -6,6 +6,8 @@ import * as path from "path";
 import * as os from "os";
 import { env } from "~/env";
 
+export const maxDuration = 300;
+
 const unstructuredKey = env.UNSTRUCTURED_API_KEY;
 
 const client = new UnstructuredClient({
