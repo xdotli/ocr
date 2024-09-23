@@ -47,8 +47,29 @@ export async function GET(request: NextRequest) {
     // Clean up the temporary file
     fs.unlinkSync(tempFilePath);
 
+    const data = result?.elements;
+
+    const unstructuredFormatted = data?.reduce((acc, el) => {
+      const { filetype, page_number = 1 } = el.metadata;
+      const index = page_number - 1;
+      // Solves //u0000 unicode issue
+      const text = el.text.replace(/[^\x20-\x7E\n\r\t]/g, "");
+      if (acc[index]) {
+        acc[index].text += "\n" + text;
+        acc[index].contentLength = acc[index].text.length;
+      } else {
+        acc.push({
+          contentLength: text.length,
+          index,
+          text,
+          type: filetype,
+        });
+      }
+      return acc;
+    }, []);
+
     if (result.statusCode === 200) {
-      return new Response(JSON.stringify(result.elements), {
+      return new Response(JSON.stringify(unstructuredFormatted), {
         status: 200,
         headers: { "Content-Type": "application/json" },
       });
