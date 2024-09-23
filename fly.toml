@@ -1,0 +1,28 @@
+# fly.toml app configuration file generated for ocr-long-tree-3939 on 2024-09-23T09:45:18-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'ocr-long-tree-3939'
+primary_region = 'lhr'
+
+[build]
+
+[http_service]
+internal_port = 3000
+force_https = true
+auto_stop_machines = 'stop'
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
+
+[[vm]]
+memory = '1gb'
+cpu_kind = 'shared'
+cpus = 1
+
+[env]
+DATABASE_URL = "<value>"
+UNSTRUCTURED_API_KEY = "<value>"
+UNSTRUCTURED_URL = "<value>"
+OMNI_API_KEY = "<value>"
