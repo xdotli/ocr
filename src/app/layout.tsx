@@ -4,7 +4,6 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import ReactQueryProvider from "~/providers/ReactQueryProvider";
 
 import { ourFileRouter } from "~/app/api/uploadthing/core";
 
@@ -29,9 +28,7 @@ export default function RootLayout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-        <ReactQueryProvider>
-          <div>{children}</div>
-        </ReactQueryProvider>
+        <div>{children}</div>
       </body>
     </html>
   );
