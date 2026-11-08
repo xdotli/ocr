@@ -49,9 +49,10 @@ export async function GET(request: NextRequest) {
     // Clean up the temporary file
     fs.unlinkSync(tempFilePath);
 
-    const data = result?.elements;
+    // unstructured-client returns the elements themselves and throws on error responses
+    const data = Array.isArray(result) ? result : [];
 
-    const unstructuredFormatted = data?.reduce((acc, el) => {
+    const unstructuredFormatted = data.reduce((acc, el) => {
       const { filetype, page_number = 1 } = el.metadata;
       const index = page_number - 1;
       // Solves //u0000 unicode issue
@@ -70,16 +71,10 @@ export async function GET(request: NextRequest) {
       return acc;
     }, []);
 
-    if (result.statusCode === 200) {
-      return new Response(JSON.stringify(unstructuredFormatted), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
-    } else {
-      return new Response("Error processing PDF", {
-        status: result.statusCode,
-      });
-    }
+    return new Response(JSON.stringify(unstructuredFormatted), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("Error processing request:", error);
     return new Response("Internal Server Error", { status: 500 });
