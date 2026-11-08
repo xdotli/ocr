@@ -29,9 +29,7 @@ client.general
     },
   })
   .then((res: PartitionResponse) => {
-    if (res.statusCode == 200) {
-      console.log(res.elements);
-    }
+    console.log(res);
   })
   .catch((e) => {
     console.log(e.statusCode);
